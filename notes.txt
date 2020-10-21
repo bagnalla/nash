@@ -1,0 +1,40 @@
+1) generic efficient MWU implementation, parametric in action space
+   and cost function
+
+  - MWU Learner class
+    + constructor takes the set of actions and initializes a weight
+      table over them. also takes the learning rate
+    + method for sampling an action given the current weights
+    + method for updating the weights given a cost vector
+    + sampling and updating should be thread-safe (probably one global
+      lock for the object)
+
+  - Equilibrium learner class
+    + constructor takes number of players, action space for each
+      player, and a cost function which takes chosen actions for each
+      player to cost vectors for each player. creates MWU learners for
+      each player
+    + 'round' method that samples an action from each player, computes
+      their cost vectors, and passes the cost vectors to their update
+      methods
+    + 'run' method for running a bunch of rounds to find an
+      equilibrium strategy profile. option for parallel execution
+      (most useful when the evaluation function is slow relative to
+      sampling and updating the MWU agents)
+
+
+EFFICIENT MWU
+
+  - When updating, we need to build the normalized probability table
+    (presumably by iterating over the weights table). We can take
+    advantage of the fact that we are already doing a linear pass to
+    also build the CDF as well, by accumulating the
+    probabilities. Then, inverse transform sampling can be done by
+    binary search through the CDF.
+
+  - Idea: to enable use of parallelization, we can try holding the
+    agents' distributions fixed and take something like 1000 samples,
+    compute the cost vectors for all samples, merge the cost vectors
+    into a single one per agent (average), and do a single update with
+    the average cost vectors. It's hard to say how this will affect
+    convergence, so it will be interesting to try.
