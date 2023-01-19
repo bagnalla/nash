@@ -129,8 +129,6 @@ double rps_utility_3(int p1_action, int p2_action)
   return 0.0;
 }
 
-// TODO: this should result in an equilibrium with 0 expected utility
-// for both players.. but it doesn't.
 double rps_utility_4(int p1_action, int p2_action)
 {
   switch (p1_action) {
@@ -174,14 +172,14 @@ void print_rps_solution(solution_t solution)
   auto p1_strat = solution.first;
   auto p2_strat = solution.second;
   cout << "player 1: \n";
-  for (size_t i = 0; i < p1_strat.size(); ++i) {
+  for (size_t i = 0; i < p1_strat.size(); i++) {
     cout << action_names[i] << ": " << p1_strat[i];
     if (i < p1_strat.size() - 1) {
       cout << ", ";
     }
   }
   cout << "\nplayer 2: \n";
-  for (size_t i = 0; i < p2_strat.size(); ++i) {
+  for (size_t i = 0; i < p2_strat.size(); i++) {
     cout << action_names[i] << ": " << p2_strat[i];
     if (i < p2_strat.size() - 1) {
       cout << ", ";

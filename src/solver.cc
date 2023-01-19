@@ -71,18 +71,32 @@ namespace nash
       }
     }
 
+    string action_string(int action) {
+      switch (action) {
+      case 0: return "ROCK";
+      case 1: return "PAPER";
+      case 2: return "SCISSORS";
+      default: return "UNKNOWN";
+      }
+    }
+
     pair<vector<double>, vector<double>>
     Solver::compute_regrets(int p1_action, int p2_action) const
     {
       double p1_utility = this->utility_function(p1_action, p2_action);
       double p2_utility = -p1_utility;
 
+      // cout << "p1_action: " << action_string(p1_action) << ", p1_utility: " << p1_utility << endl;
+      // cout << "p2_action: " << action_string(p2_action) << ", p2_utility: " << p2_utility << endl;
+
       vector<double> p1_regrets, p2_regrets;
       for (size_t i = 0; i < this->p1_agent.get_action_space_size(); ++i) {
-	p1_regrets.push_back(this->utility_function(i, p2_action) - p1_utility);
+	auto regret = this->utility_function(i, p2_action) - p1_utility;
+	p1_regrets.push_back(regret);
       }
       for (size_t i = 0; i < this->p2_agent.get_action_space_size(); ++i) {
-	p2_regrets.push_back(p2_utility - this->utility_function(p1_action, i));
+	auto regret = -this->utility_function(p1_action, i) - p2_utility;
+	p2_regrets.push_back(regret);
       }
       
       return make_pair(p1_regrets, p2_regrets);
