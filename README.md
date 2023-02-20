@@ -1,5 +1,5 @@
 # nash
-nash.
+Compute mixed nash equilibria of RPS-style games via regret minimization.
 
 CMake is required.
 
